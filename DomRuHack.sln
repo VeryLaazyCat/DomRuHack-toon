@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContractsCreator", "Contrac
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{4F26ECC8-B858-4FCC-9FFE-FDB701B07F80}"
 EndProject
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "React_UI", "React_UI\React_UI.njsproj", "{402EE1C9-FAAB-4282-8285-FF92CE06A66B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{4F26ECC8-B858-4FCC-9FFE-FDB701B07F80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F26ECC8-B858-4FCC-9FFE-FDB701B07F80}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F26ECC8-B858-4FCC-9FFE-FDB701B07F80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{402EE1C9-FAAB-4282-8285-FF92CE06A66B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{402EE1C9-FAAB-4282-8285-FF92CE06A66B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{402EE1C9-FAAB-4282-8285-FF92CE06A66B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{402EE1C9-FAAB-4282-8285-FF92CE06A66B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
