@@ -1,10 +1,10 @@
-﻿using ContractsCreator.SimpleStorage;
-using ContractsCreator.SimpleStorage.ContractDefinition;
-using Nethereum.Web3;
+﻿using Nethereum.Web3;
 using Nethereum.Web3.Accounts;
 using System;
 using System.Numerics;
 using System.Threading.Tasks;
+using SimpleStorage.Contracts.SimpleStorage.ContractDefinition;
+using SimpleStorage.Contracts.SimpleStorage;
 
 namespace ContractsCreator
 {
@@ -50,6 +50,7 @@ namespace ContractsCreator
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
+                Console.WriteLine("Exception!");
             }
 
             Console.WriteLine("Finished");

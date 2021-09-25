@@ -10,7 +10,7 @@ using Nethereum.Contracts.CQS;
 using Nethereum.Contracts;
 using System.Threading;
 
-namespace ContractsCreator.SimpleStorage.ContractDefinition
+namespace SimpleStorage.Contracts.SimpleStorage.ContractDefinition
 {
 
 
