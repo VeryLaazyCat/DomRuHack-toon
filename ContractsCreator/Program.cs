@@ -5,6 +5,8 @@ using System.Numerics;
 using System.Threading.Tasks;
 using SimpleStorage.Contracts.SimpleStorage.ContractDefinition;
 using SimpleStorage.Contracts.SimpleStorage;
+using Nethereum.JsonRpc.Client;
+using System.Configuration;
 
 namespace ContractsCreator
 {
@@ -19,33 +21,33 @@ namespace ContractsCreator
         {
             try
             {
+                var config = ConfigurationManager.AppSettings;
                 var url = "http://localhost:8545";
                 var account = new Account(
-                    key: new Nethereum.Signer.EthECKey("0xb5b1870957d373ef0eeffecc6e4812c0fd08f554b37b233526acc331bf1544f7"),
-                    chainId: new BigInteger(444444444500)
+                    key: new Nethereum.Signer.EthECKey(config["privateKey"]),
+                    chainId: BigInteger.Parse(config["chainId"])
                 );
-
                 var web3 = new Web3(account, url);
 
-                Console.WriteLine("Deploying...");
+                Console.WriteLine("Развёртывание контракта...");
                 var deployment = new SimpleStorageDeployment();
                 var receipt = await SimpleStorageService.DeployContractAndWaitForReceiptAsync(web3, deployment);
                 var service = new SimpleStorageService(web3, receipt.ContractAddress);
-                Console.WriteLine($"Contract Deployment Tx Status: {receipt.Status.Value}");
-                Console.WriteLine($"Contract Address: {service.ContractHandler.ContractAddress}");
-                Console.WriteLine("");
+                Console.WriteLine($"Статус отправки контракта: {receipt.Status.Value}");
+                Console.WriteLine($"Адрес контракта: {service.ContractHandler.ContractAddress}");
+                Console.WriteLine();
 
-                Console.WriteLine("Sending a transaction to the function set()...");
+                Console.WriteLine("Выполнение функции set()...");
                 var receiptForSetFunctionCall = await service.SetRequestAndWaitForReceiptAsync(
                     new SetFunction() { X = 42, Gas = 400000 });
-                Console.WriteLine($"Finished storing an int: Tx Hash: {receiptForSetFunctionCall.TransactionHash}");
-                Console.WriteLine($"Finished storing an int: Tx Status: {receiptForSetFunctionCall.Status.Value}");
-                Console.WriteLine("");
+                Console.WriteLine($"Результат функции: Tx хеш: {receiptForSetFunctionCall.TransactionHash}");
+                Console.WriteLine($"Результат функции: Tx статус: {receiptForSetFunctionCall.Status.Value}");
+                Console.WriteLine();
 
-                Console.WriteLine("Calling the function get()...");
+                Console.WriteLine("Обращение к функции get()...");
                 var intValueFromGetFunctionCall = await service.GetQueryAsync();
-                Console.WriteLine($"Int value: {intValueFromGetFunctionCall} (expecting value 42)");
-                Console.WriteLine("");
+                Console.WriteLine($"Значение int: {intValueFromGetFunctionCall} (ожидаемое значение: 42)");
+                Console.WriteLine();
             }
             catch (Exception ex)
             {
@@ -53,7 +55,7 @@ namespace ContractsCreator
                 Console.WriteLine("Exception!");
             }
 
-            Console.WriteLine("Finished");
+            Console.WriteLine("Конец");
             Console.ReadLine();
         }
     }
