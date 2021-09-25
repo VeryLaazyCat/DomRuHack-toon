@@ -2,7 +2,6 @@
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Nethereum.Web3;
 using Nethereum.Web3.Accounts;
 using SimpleStorage.Contracts.SimpleStorage;
@@ -18,17 +17,14 @@ namespace WebAPI.Controllers
     /// <summary> Тестовый контракт</summary>
     [ApiController]
     [Route("[controller]")]
-    public class IntegerContractController : ControllerBase
+    public class IncrementIntegerContractController : ControllerBase
     {
-        private readonly ILogger<IntegerContractController> _logger;
         private readonly ContractsContext _context;
         private readonly IConfiguration _config;
 
-        public IntegerContractController(ILogger<IntegerContractController> logger,
-                                         ContractsContext contractsContext,
-                                         IConfiguration configuration)
+        public IncrementIntegerContractController(ContractsContext contractsContext,
+                                                  IConfiguration configuration)
         {
-            _logger = logger;
             _context = contractsContext;
             _config = configuration;
         }
@@ -50,35 +46,26 @@ namespace WebAPI.Controllers
 
             Debug.WriteLine("Обращение к функции get()...");
             var intValueFromGetFunctionCall = await service.GetQueryAsync();
-            Debug.WriteLine($"Значение int: {intValueFromGetFunctionCall} (ожидаемое значение: 42)");
-            Debug.WriteLine("");
 
             _context.ContractInfos.First(c => c.Address == address);
-            return new JsonResult(new { Info = "Контракт найден" });
+            return new JsonResult(new { Info = "Контракт найден", Result = intValueFromGetFunctionCall.ToString() });
         }
 
         /// <summary> Создать смарт контракт</summary>
         [HttpPost]
         public async Task<ActionResult> Post()
         {
-            string address = "";
-            try
-            {
-                Web3 web3 = GetWeb3Wrapper();
+            Web3 web3 = GetWeb3Wrapper();
 
-                Debug.WriteLine("Развёртывание контракта...");
-                var deployment = new SimpleStorageDeployment();
-                var receipt = await SimpleStorageService.DeployContractAndWaitForReceiptAsync(web3, deployment);
-                var service = new SimpleStorageService(web3, receipt.ContractAddress);
-                Debug.WriteLine($"Статус отправки контракта: {receipt.Status.Value}");
+            Debug.WriteLine("Развёртывание контракта...");
+            var deployment = new SimpleStorageDeployment();
+            var receipt = await SimpleStorageService.DeployContractAndWaitForReceiptAsync(web3, deployment);
+            var service = new SimpleStorageService(web3, receipt.ContractAddress);
+            Debug.WriteLine($"Статус отправки контракта: {receipt.Status.Value}");
+            var address = service.ContractHandler.ContractAddress;
 
-                _context.ContractInfos.Add(new ContractInfo() { Address = service.ContractHandler.ContractAddress });
-                _context.SaveChanges();
-            }
-            catch
-            {
-
-            }
+            _context.ContractInfos.Add(new ContractInfo() { Address = address });
+            _context.SaveChanges();
 
             return new JsonResult(new { Info = "Смарт контракт успешно занесён в блокчейн, адрес контракта: " + address });
         }
