@@ -29,6 +29,7 @@ namespace ContractsCreator
                 );
                 var web3 = new Web3(account, url);
 
+
                 Console.WriteLine("Развёртывание контракта...");
                 var deployment = new SimpleStorageDeployment();
                 var receipt = await SimpleStorageService.DeployContractAndWaitForReceiptAsync(web3, deployment);
@@ -38,8 +39,7 @@ namespace ContractsCreator
                 Console.WriteLine();
 
                 Console.WriteLine("Выполнение функции set()...");
-                var receiptForSetFunctionCall = await service.SetRequestAndWaitForReceiptAsync(
-                    new SetFunction() { X = 42, Gas = 400000 });
+                var receiptForSetFunctionCall = await service.SetRequestAndWaitForReceiptAsync(new SetFunction() { X = 42, Gas = 400000 });
                 Console.WriteLine($"Результат функции: Tx хеш: {receiptForSetFunctionCall.TransactionHash}");
                 Console.WriteLine($"Результат функции: Tx статус: {receiptForSetFunctionCall.Status.Value}");
                 Console.WriteLine();
