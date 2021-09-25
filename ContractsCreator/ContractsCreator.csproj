@@ -6,12 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Nethereum.Autogen.ContractApi" Version="3.6.2" />
-    <PackageReference Include="Nethereum.Web3" Version="4.0.5" />
+      <PackageReference Include="Nethereum.Autogen.ContractApi" Version="3.6.2" />
+      <PackageReference Include="Nethereum.Web3" Version="4.0.5" />
+      <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="SimpleStorage\SimpleStorage\" />
+      <Folder Include="SimpleStorage\SimpleStorage\" />
   </ItemGroup>
 
 </Project>
