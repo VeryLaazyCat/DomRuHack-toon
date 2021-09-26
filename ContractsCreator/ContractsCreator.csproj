@@ -13,6 +13,7 @@
 
   <ItemGroup>
       <Folder Include="SimpleStorage\SimpleStorage\" />
+      <Folder Include="Smart-Contracts\" />
   </ItemGroup>
 
 </Project>
