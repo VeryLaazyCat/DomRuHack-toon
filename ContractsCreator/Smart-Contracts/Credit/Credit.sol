@@ -1,7 +1,7 @@
 // "SPDX-License-Identifier: UNLICENSED"
 pragma solidity 0.8.7;
 
-import "./Entities.sol";
+import "../shared/Entities.sol";
 
 struct BankInfo {
     string name;
