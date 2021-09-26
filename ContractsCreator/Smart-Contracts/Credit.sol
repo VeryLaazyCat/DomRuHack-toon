@@ -12,9 +12,10 @@ struct BankInfo {
 contract Credit is Borrower, Bank, Insurer {
     enum CreditStatus { Processed, Complite }
 
-    CreditStatus public _status;
     uint private _docNumber;
-    int private _creditSum;
+    uint private _creditSum;
+
+    CreditStatus public _status;
     
     constructor(BankInfo memory representative) {
         _status = CreditStatus.Processed;
@@ -33,30 +34,37 @@ contract Credit is Borrower, Bank, Insurer {
         _;
     }
 
-    // ---
+    // -!Modificators-
     // Events
 
-    event CreditSumChanged(address indexed whoChange, int indexed oldSum, int indexed newSum);
-    event DepositOnAccount(address indexed from, address indexed where, int depositSum);
-    event ActualCreditSum(int indexed creditSum);
+    event CreditSumChanged(address indexed whoChange, uint indexed oldSum, uint indexed newSum);
+    event DepositOnAccount(address indexed from, address indexed where, uint depositSum, uint remainder);
+    event ActualCreditSum(uint indexed creditSum);
 
-    // ---
+    // -!Events-
     // Functions
 
-    function SetCreditSum(int newCreditSum) public onlyBank() {
+    function SetCreditSum(uint newCreditSum) public onlyBank() {
         emit CreditSumChanged(_bankAddress, _creditSum, newCreditSum);
         _creditSum = newCreditSum;
     }
 
-    function Deposit(int depositSum) public {
-        emit DepositOnAccount(msg.sender, _bankAddress, depositSum);
-        _creditSum -= depositSum;
+    function Deposit(uint depositSum) public returns (uint) {
+        uint remainder = 0;
+        if (depositSum > _creditSum) {
+            remainder = depositSum - _creditSum;
+            _creditSum = 0;
+        } else {
+            _creditSum -= depositSum;
+        }
+        emit DepositOnAccount(msg.sender, _bankAddress, depositSum, remainder);
         emit ActualCreditSum(_creditSum);
+        return (remainder);
     }
 
-    function GetCreditSum() external view returns (int) {
+    function GetCreditSum() external view returns (uint) {
         return _creditSum;
     }
 
-    // ---
+    // -!Functions-
 }
